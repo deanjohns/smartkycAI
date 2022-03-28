@@ -1,7 +1,7 @@
 import nltk
 # nltk.download('punkt')
-from nltk.tag.stanford import StanfordNERTagger
-st = StanfordNERTagger('stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz', 'stanford-ner/stanford-ner.jar')
+from nltk import tag
+st = tag.stanford.StanfordNERTagger('stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz', 'stanford-ner/stanford-ner.jar')
 # st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz')
 
 def getName(text):

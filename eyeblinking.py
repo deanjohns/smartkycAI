@@ -2,8 +2,8 @@
 import urllib
 
 import numpy as np
-from scipy.spatial import distance as dist
-from imutils.video import FileVideoStream
+from scipy import spatial as spatial
+from imutils import video
 from imutils import face_utils
 import imutils
 import time
@@ -12,9 +12,13 @@ import cv2
 
 
 def getConfidence(conf, error):
-    if error:
-        return None
-    confValue = conf * 100
+    #print('cc', conf)
+    #if error:
+    #    return None
+    if conf < 0:
+        confValue = abs(conf)
+    confValue = confValue * 100
+
     if confValue < 50:
         confValue *= 2
     elif confValue > 100:
@@ -25,11 +29,11 @@ def getConfidence(conf, error):
 def eye_aspect_ratio(eye):
     # compute the euclidean distances between the two sets of
     # vertical eye landmarks (x, y)-coordinates
-    A = dist.euclidean(eye[1], eye[5])
-    B = dist.euclidean(eye[2], eye[4])
+    A = spatial.distance.euclidean(eye[1], eye[5])
+    B = spatial.distance.euclidean(eye[2], eye[4])
     # compute the euclidean distance between the horizontal
     # eye landmark (x, y)-coordinates
-    C = dist.euclidean(eye[0], eye[3])
+    C = spatial.distance.euclidean(eye[0], eye[3])
     # compute the eye aspect ratio
     ear = (A + B) / (2.0 * C)
     # return the eye aspect ratio
@@ -64,7 +68,7 @@ def blinkingProcess(videoUrl):
     print("[INFO] starting video stream thread...")
     # videoFromUrl = urllib.request.urlopen(videoUrl)
     # print("vidfromurl", videoFromUrl)
-    vs = FileVideoStream(videoUrl).start()
+    vs = video.FileVideoStream(videoUrl).start()
     # vs = FileVideoStream(videoFromUrl).start()
     time.sleep(1.0)
 
@@ -79,6 +83,7 @@ def blinkingProcess(videoUrl):
         # it, and convert it to grayscale
         # channels)
         frame = vs.read()
+        # print("frame", frame)
         if not isinstance(frame, np.ndarray):
             print("type none", type(frame))
             error = "No video found"
@@ -98,8 +103,13 @@ def blinkingProcess(videoUrl):
             count += 1
             # print("Detection {}, score: {}, face_type:{}".format(
             #     d, scores[i], idx[i]))
-        confidenceScore = cumConf / count
-        # print("conf", confidenceScore)
+            # print("conf", scores[i])
+        confidenceScore = 0
+        if count > 0:
+            confidenceScore = cumConf / count
+        else:
+            confidenceScore = cumConf / 1
+        # print("conf", cumConf)
 
         # loop over the face detections
         for rect in rects:
@@ -146,7 +156,7 @@ def blinkingProcess(videoUrl):
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
             # show the frame
-            cv2.imshow("Frame", frame)
+            # cv2.imshow("Frame", frame)
             # key = cv2.waitKey(1) & 0xFF
 
             # if the `q` key was pressed, break from the loop
@@ -154,11 +164,11 @@ def blinkingProcess(videoUrl):
             #     break
 
         # do a bit of cleanup
-        cv2.destroyAllWindows()
-        vs.stop()
+        #cv2.destroyAllWindows()
+        #vs.stop()
 
-    print("total blinks", TOTAL)
-    print("confidence", getConfidence(confidenceScore, error))
-    result = {"isLive": TOTAL > 2, "confidence": getConfidence(confidenceScore, error), "error": error}
+    #print("total blinks", TOTAL)
+    #print("confidence", getConfidence(confidenceScore, error))
+    result = {"isLive": TOTAL > 2, "confidence": getConfidence(confidenceScore, error), "error": ""}
     return result
 

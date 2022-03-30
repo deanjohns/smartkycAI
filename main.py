@@ -18,12 +18,12 @@ api = Api(app)
 url1 = "https://psrtempbucket.s3.ap-south-1.amazonaws.com/temp_dls/blink1.webm"
 url2 = "https://psrtempbucket.s3.ap-south-1.amazonaws.com/temp_dls/kausikan.webm"
 url3 = "https://smart-cap.obs.ap-southeast-3.myhuaweicloud.com/1648199202430_1648199202430.webm"
-print("blinks", blinkingProcess(url3))
+# print("blinks", blinkingProcess(url3))
 
 # niceUrl1 = "https://i.ibb.co/Lpttzzq/NIC-front.jpg"
 # niceUrl2 = "https://i.ibb.co/WghtK4M/NIC-back.jpg"
 drivinglicense = "https://i.ibb.co/M5XvzrY/lashan.jpg"
-drivinglicense2 = "https://i.ibb.co/wB0ZS3Z/sudaraka.jpg"
+drivinglicense2 = "https://i.ibb.co/SQyWWSH/sudaraka.jpg"
 drivinglicense3 = "https://i.ibb.co/ZXG9rnq/chopra.jpg"
 
 drivinglicense4 = "https://i.ibb.co/qD6Qx38/isira1.jpg"
@@ -101,5 +101,5 @@ api.add_resource(getIdFace, '/getidface')
 api.add_resource(getfacematching, '/getidfacematching')
 api.add_resource(getBlinkingCount, '/islive')
 
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run()
